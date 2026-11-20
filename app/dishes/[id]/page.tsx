@@ -197,6 +197,11 @@ export default async function DishPage({
           </button>
         </form>
       )}
+      {existingReview && (
+        <p role="status" className="mt-4 rounded border border-green-200 bg-green-50 p-3 text-sm text-green-700">
+          Saved.
+        </p>
+      )}
     </main>
   );
 }
