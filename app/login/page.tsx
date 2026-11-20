@@ -48,7 +48,7 @@ export default async function LoginPage({
       <h1 className="text-2xl font-semibold">Sign in</h1>
 
       {searchParams.error ? (
-        <p id={errorId} role="alert" className="mt-4 text-sm text-red-700">
+        <p id={errorId} role="alert" className="mt-4 rounded border-red-200 bg-red-50 p-3 text-sm text-red-700">
           Wrong email or password.
         </p>
       ) : null}
