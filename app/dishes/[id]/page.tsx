@@ -10,6 +10,11 @@ export const dynamic = "force-dynamic";
 
 type Rating = { average: number; count: number };
 
+function starString(average: number) {
+  const filled = Math.round(average);
+  return "★".repeat(filled) + "☆".repeat(5 - filled);
+}
+
 function ratingLabel(rating: Rating | undefined) {
   if (!rating || rating.count === 0) return "no reviews";
   return `${rating.average.toFixed(1)} (${rating.count})`;
@@ -101,6 +106,7 @@ export default async function DishPage({
 }) {
   const dish = await prisma.menuItem.findUnique({
     where: { id: params.id },
+    include: { reviews: true },
   });
 
   if (!dish || !dish.active) {
@@ -152,9 +158,36 @@ export default async function DishPage({
         </p>
         <p>
           <span className="font-medium text-neutral-900">Rating:</span>{" "}
-          <span className="text-neutral-700">{ratingLabel(rating)}</span>
+          {rating ? (
+            <>
+              <span aria-hidden="true" className="text-amber-500">
+                {starString(rating.average)}
+              </span>{" "}
+              <span className="text-neutral-700">{ratingLabel(rating)}</span>
+            </>
+          ) : (
+            <span className="text-neutral-700">no reviews</span>
+          )}
         </p>
       </div>
+
+      {dish.reviews.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {dish.reviews.map((review) => {
+            const stars = review.stars;
+            return (
+              <span key={review.id} className="text-sm">
+                <span aria-hidden="true" className="text-amber-500">
+                  {starString(stars)}
+                </span>
+                <span className="sr-only">
+                  {stars} out of 5 stars
+                </span>
+              </span>
+            );
+          })}
+        </div>
+      )}
 
       {isStudent && (
         <form
