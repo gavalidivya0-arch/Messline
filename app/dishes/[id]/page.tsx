@@ -224,12 +224,12 @@ export default async function DishPage({
             );
           })}
         </div>
+      )}
 
       {searchParams?.saved === "1" && (
         <p role="status" className="mt-4 text-sm font-medium">
           Saved.
         </p>
-
       )}
 
       {isStudent && (
